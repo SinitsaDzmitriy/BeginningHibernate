@@ -15,7 +15,16 @@
         <property name="format_sql">true</property>
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create-drop</property>
+
+        <!-- List of entities: -->
+        <mapping class="edu.hibernate.samples.evaluator.model.domain.Person"/>
+        <mapping class="edu.hibernate.samples.evaluator.model.domain.Skill"/>
+        <mapping class="edu.hibernate.samples.evaluator.model.domain.Ranking"/>
+
+        <!--
         <mapping class="edu.hibernate.samples.messenger.model.domain.Message"/>
+        -->
+
     </session-factory>
 </hibernate-configuration>
 

@@ -1,4 +1,4 @@
-package edu.hibernate.samples.evaluator.persistence;
+package edu.hibernate.samples.evaluator.proof.persistence;
 
 import edu.hibernate.samples.evaluator.DAO.PersonHardcodedDao;
 import edu.hibernate.samples.evaluator.model.domain.Person;

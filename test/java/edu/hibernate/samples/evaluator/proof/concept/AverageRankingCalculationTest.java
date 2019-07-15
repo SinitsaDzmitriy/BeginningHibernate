@@ -1,4 +1,4 @@
-package edu.hibernate.samples.evaluator.concept;
+package edu.hibernate.samples.evaluator.proof.concept;
 
 import edu.hibernate.samples.evaluator.DAO.PersonHardcodedDao;
 import edu.hibernate.samples.evaluator.DAO.RankingHardcodedDao;
@@ -23,7 +23,8 @@ import java.util.stream.Collectors;
 
 public class AverageRankingCalculationTest {
     private final int AVG = 7;
-    private final int NEW_AVG = 8;
+    private final int AVG_AFTER_CHANGE = 8;
+    private final int AVG_AFTER_DELETION= 8;
     private final int NUMBER_OF_RANKINGS = 3;
 
     private SessionFactory factory;
@@ -42,40 +43,14 @@ public class AverageRankingCalculationTest {
         personDao = new PersonHardcodedDao();
         skillDao = new SkillHardcodedDao();
         rankingDao = new RankingHardcodedDao();
+
+        populateRankingData();
     }
 
     @Test
     public void calculateAverageRanking() {
         try (Session session = factory.openSession()) {
-            Transaction trans = session.beginTransaction();
-
-            List<Ranking> rankings = new ArrayList<>(NUMBER_OF_RANKINGS);
-            rankings.add(
-                    new Ranking(
-                            personDao.obtainPerson(session, "John Snow"),
-                            personDao.obtainPerson(session, "Samwell Tarly"),
-                            skillDao.obtainSkill(session, "swordplay"),
-                            8));
-            rankings.add(
-                    new Ranking(
-                            personDao.obtainPerson(session, "John Snow"),
-                            personDao.obtainPerson(session, "Barristan Selmy"),
-                            skillDao.obtainSkill(session, "swordplay"),
-                            6));
-            rankings.add(
-                    new Ranking(
-                            personDao.obtainPerson(session, "John Snow"),
-                            personDao.obtainPerson(session, "Robb Stark"),
-                            skillDao.obtainSkill(session, "swordplay"),
-                            7));
-
-            for (int i = 0; i < NUMBER_OF_RANKINGS; i++) {
-                rankingDao.persistRanking(session, rankings.get(i));
-            }
-
-            trans.commit();
-
-            Query<Ranking> query = session
+            Query<Ranking> query = factory.openSession()
                     .createQuery("from Ranking r where r.subject.name=:subjectName and r.skill.name=:skillName",
                             Ranking.class);
             query.setParameter("subjectName", "John Snow");
@@ -84,7 +59,6 @@ public class AverageRankingCalculationTest {
             IntSummaryStatistics stats = query.list()
                     .stream()
                     .collect(Collectors.summarizingInt(Ranking::getRanking));
-
             // to assert - утверждать, заявлять
             Assert.assertEquals(stats.getCount(), 3);
             Assert.assertEquals((int) stats.getAverage(), AVG);
@@ -93,7 +67,6 @@ public class AverageRankingCalculationTest {
 
     @Test
     public void newCalculateAverageRanking() {
-        populateRankingData();
 //      If Session object is passed outside the class scope, test failure occurs (query res is an empty list).
 //      Assert.assertEquals(new RankingService().calculateAverage(session, "John Snow", "swordplay"), AVG);
         Assert.assertEquals(calculateAverage("John Snow", "swordplay"), AVG);
@@ -101,8 +74,7 @@ public class AverageRankingCalculationTest {
 
     @Test
     public void changeRanking() {
-        populateRankingData();
-        try(Session session = factory.openSession()) {
+        try (Session session = factory.openSession()) {
             Transaction trans = session.beginTransaction();
             Query<Ranking> query = session.createQuery("from Ranking r where r.subject.name=:subject and r.observer.name=:observer and r.skill.name=:skill", Ranking.class);
             query.setParameter("subject", "John Snow");
@@ -113,7 +85,24 @@ public class AverageRankingCalculationTest {
             ranking.setRanking(9);
             trans.commit();
         }
-        Assert.assertEquals(calculateAverage("John Snow", "swordplay"), NEW_AVG);
+        Assert.assertEquals(calculateAverage("John Snow", "swordplay"), AVG_AFTER_CHANGE);
+    }
+
+    @Test
+    public void removeRanking() {
+        try(Session session = factory.openSession()) {
+            Transaction trans = session.beginTransaction();
+            Ranking ranking = findRanking(session, "John Snow",
+                    "Barristan Selmy", "swordplay");
+            Assert.assertNotNull(ranking);
+            session.delete(ranking);
+            trans.commit();
+
+            ranking = findRanking(session, "John Snow",
+                    "Barristan Selmy", "swordplay");
+            Assert.assertNull(ranking);
+            Assert.assertEquals(calculateAverage("John Snow", "swordplay"), AVG_AFTER_DELETION);
+        }
     }
 
     private void populateRankingData() {
@@ -148,7 +137,7 @@ public class AverageRankingCalculationTest {
     }
 
     private int calculateAverage(String subject, String skill) {
-        try(Session session = factory.openSession()) {
+        try (Session session = factory.openSession()) {
             Query<Ranking> query = session
                     .createQuery("from Ranking r where r.subject.name=:subjectName and r.skill.name=:skillName",
                             Ranking.class);
@@ -166,5 +155,14 @@ public class AverageRankingCalculationTest {
             }
             return (int) Math.round(avg.getAsDouble());
         }
+    }
+
+    private Ranking findRanking(Session session, String subject,
+                                String observer, String skill) {
+        Query<Ranking> query = session.createQuery("from Ranking r where r.subject.name=:subject and r.observer.name=:observer and r.skill.name=:skill", Ranking.class);
+        query.setParameter("subject", subject);
+        query.setParameter("observer", observer);
+        query.setParameter("skill", skill);
+        return query.uniqueResult();
     }
 }

@@ -1,6 +1,5 @@
-package edu.hibernate.samples.evaluator.persistence;
+package edu.hibernate.samples.evaluator.proof.persistence;
 
-import com.github.javafaker.Faker;
 import edu.hibernate.samples.evaluator.DAO.PersonHardcodedDao;
 import edu.hibernate.samples.evaluator.DAO.RankingHardcodedDao;
 import edu.hibernate.samples.evaluator.DAO.SkillHardcodedDao;

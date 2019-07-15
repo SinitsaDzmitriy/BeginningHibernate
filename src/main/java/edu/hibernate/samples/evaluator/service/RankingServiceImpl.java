@@ -37,6 +37,11 @@ public class RankingServiceImpl implements IRankingService {
     }
 
     @Override
+    public Ranking findRanking(String subject, String observer, String skill) {
+        return new Ranking();
+    }
+
+    @Override
     public int getAverageRanking(String subject, String skill) {
         try (Session session = SessionUtil.getSession()) {
                 Query<Ranking> query = session
@@ -57,4 +62,7 @@ public class RankingServiceImpl implements IRankingService {
                 return (int) Math.round(avg.getAsDouble());
         }
     }
+
+    @Override
+    public void updateRanking(String subject, String observer, String skill, int updatedRanking) {}
 }

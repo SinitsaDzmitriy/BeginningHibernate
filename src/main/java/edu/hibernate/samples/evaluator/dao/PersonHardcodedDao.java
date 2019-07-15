@@ -3,7 +3,6 @@ package edu.hibernate.samples.evaluator.dao;
 import edu.hibernate.samples.evaluator.model.domain.Person;
 import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 /*
@@ -15,12 +14,11 @@ import org.hibernate.query.Query;
         This class was designed on the assumption of that caller provides a
     Session and manages Transactions.
 
-
     to acquire - приобретать, получать
-
 */
 
 public class PersonHardcodedDao {
+
     /*
             BOOK NOTES
             This query selects data from the table created from the Person entity,
@@ -48,28 +46,17 @@ public class PersonHardcodedDao {
 
     // Application programming interface (API)
 
-    public void persistPerson(Person person) {
-        try (Session session = SessionUtil.getSession()) {
-            Transaction trans = session.beginTransaction();
-            persistPerson(session, person);
-            trans.commit();
-        }
-    }
-
-    public Person obtainPerson(String name) {
-        try (Session session = SessionUtil.getSession()) {
-            Person person = findPerson(session, name);
-            if (person == null) {
-                person = new Person(name);
-                persistPerson(session, person);
-            }
-            return person;
-        }
-    }
-
-
     public void persistPerson(Session session, Person person) {
         session.save(person);
+    }
+
+    public Person obtainPerson(Session session, String name) {
+        Person person = findPerson(session, name);
+        if (person == null) {
+            person = new Person(name);
+            session.save(person);
+        }
+        return person;
     }
 
     public Person findPerson(Session session, String name) {
@@ -79,12 +66,15 @@ public class PersonHardcodedDao {
         return query.uniqueResult();
     }
 
-    public Person obtainPerson(Session session, String name) {
-        Person person = findPerson(session, name);
-        if (person == null) {
-            person = new Person(name);
-            persistPerson(session, person);
+    // This method should be used if only a Person object is required.
+    public Person obtainPerson(String name) {
+        try (Session session = SessionUtil.getSession()) {
+            Person person = findPerson(session, name);
+            if (person == null) {
+                person = new Person(name);
+                persistPerson(session, person);
+            }
+            return person;
         }
-        return person;
     }
 }

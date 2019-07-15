@@ -1,7 +1,6 @@
 package edu.hibernate.samples.evaluator.real;
 
 import edu.hibernate.samples.evaluator.service.IRankingService;
-import edu.hibernate.samples.evaluator.service.RankingService;
 import edu.hibernate.samples.evaluator.service.RankingServiceImpl;
 import org.testng.Assert;
 import org.testng.annotations.Test;

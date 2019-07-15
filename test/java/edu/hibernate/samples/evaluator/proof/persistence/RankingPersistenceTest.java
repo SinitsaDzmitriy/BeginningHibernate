@@ -1,8 +1,8 @@
 package edu.hibernate.samples.evaluator.proof.persistence;
 
-import edu.hibernate.samples.evaluator.DAO.PersonHardcodedDao;
-import edu.hibernate.samples.evaluator.DAO.RankingHardcodedDao;
-import edu.hibernate.samples.evaluator.DAO.SkillHardcodedDao;
+import edu.hibernate.samples.evaluator.dao.PersonHardcodedDao;
+import edu.hibernate.samples.evaluator.dao.RankingHardcodedDao;
+import edu.hibernate.samples.evaluator.dao.SkillHardcodedDao;
 import edu.hibernate.samples.evaluator.model.domain.Person;
 
 import edu.hibernate.samples.evaluator.model.domain.Ranking;

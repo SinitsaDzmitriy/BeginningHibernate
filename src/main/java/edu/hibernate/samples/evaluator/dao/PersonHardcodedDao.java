@@ -1,7 +1,9 @@
-package edu.hibernate.samples.evaluator.DAO;
+package edu.hibernate.samples.evaluator.dao;
 
 import edu.hibernate.samples.evaluator.model.domain.Person;
+import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 /*
@@ -45,6 +47,26 @@ public class PersonHardcodedDao {
     */
 
     // Application programming interface (API)
+
+    public void persistPerson(Person person) {
+        try (Session session = SessionUtil.getSession()) {
+            Transaction trans = session.beginTransaction();
+            persistPerson(session, person);
+            trans.commit();
+        }
+    }
+
+    public Person obtainPerson(String name) {
+        try (Session session = SessionUtil.getSession()) {
+            Person person = findPerson(session, name);
+            if (person == null) {
+                person = new Person(name);
+                persistPerson(session, person);
+            }
+            return person;
+        }
+    }
+
 
     public void persistPerson(Session session, Person person) {
         session.save(person);

@@ -1,21 +1,18 @@
 package edu.hibernate.samples.evaluator.service;
 
-import edu.hibernate.samples.evaluator.DAO.PersonHardcodedDao;
-import edu.hibernate.samples.evaluator.DAO.RankingHardcodedDao;
-import edu.hibernate.samples.evaluator.DAO.SkillHardcodedDao;
+import edu.hibernate.samples.evaluator.dao.PersonHardcodedDao;
+import edu.hibernate.samples.evaluator.dao.RankingHardcodedDao;
+import edu.hibernate.samples.evaluator.dao.SkillHardcodedDao;
 import edu.hibernate.samples.evaluator.model.domain.Ranking;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.hibernate.service.ServiceRegistry;
 
-import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.OptionalDouble;
-import java.util.stream.Collectors;
 
 public class RankingService {
     private SessionFactory factory;
@@ -57,7 +54,7 @@ public class RankingService {
                 .mapToInt(Ranking::getRanking)
                 .average();
 
-        if(!avg.isPresent()) {
+        if (!avg.isPresent()) {
             throw new IllegalArgumentException("Empty response for the query.");
         }
         return (int) Math.round(avg.getAsDouble());

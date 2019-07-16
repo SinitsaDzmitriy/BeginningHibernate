@@ -16,7 +16,8 @@ public class SessionUtil {
         factory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
 
-    private SessionUtil() {}
+    private SessionUtil() {
+    }
 
     public static Session getSession() {
         return factory.openSession();

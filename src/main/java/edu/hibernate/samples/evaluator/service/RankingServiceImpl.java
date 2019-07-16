@@ -89,10 +89,6 @@ public class RankingServiceImpl implements IRankingService {
     }
 
     @Override
-    public void deleteRanking(String subject, String observer, String skill) {
-    }
-
-    @Override
     public void updateRanking(String subject, String observer, String skill, int updatedRanking) {
         try (Session session = SessionUtil.getSession()) {
             Transaction trans = session.beginTransaction();
@@ -108,6 +104,21 @@ public class RankingServiceImpl implements IRankingService {
             trans.commit();
         }
     }
+
+    @Override
+    public void deleteRanking(String subject, String observer, String skill) {
+        try (Session session = SessionUtil.getSession()) {
+            Transaction trans = session.beginTransaction();
+
+            Ranking ranking = getRanking(session, subject, observer, skill);
+            if (ranking != null) {
+                session.delete(ranking);
+            }
+
+            trans.commit();
+        }
+    }
+
 
     private Ranking getRanking(Session session, String subject, String observer, String skill) {
 

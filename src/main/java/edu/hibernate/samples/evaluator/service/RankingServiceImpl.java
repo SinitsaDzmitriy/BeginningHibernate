@@ -11,6 +11,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.OptionalDouble;
 
 public class RankingServiceImpl implements IRankingService {
@@ -38,7 +39,31 @@ public class RankingServiceImpl implements IRankingService {
 
     @Override
     public int getRanking(String subject, String observer, String skill) {
-        return 0;
+        try (Session session = SessionUtil.getSession()) {
+            Query<Ranking> query = session
+                    .createQuery("from Ranking r " +
+                                    "where r.subject.name=:subjectName " +
+                                    "and r.observer.name=:observerName " +
+                                    "and r.skill.name=:skillName",
+                            Ranking.class);
+
+            query.setParameter("subjectName", subject);
+            query.setParameter("observerName", observer);
+            query.setParameter("skillName", skill);
+
+            Ranking ranking = query.uniqueResult();
+
+            if (ranking == null) {
+                throw new EntityNotFoundException(new StringBuilder("Query params: subjectName=")
+                        .append(subject)
+                        .append(", observerName=")
+                        .append(observer)
+                        .append(", skillName=")
+                        .append(skill)
+                        .toString());
+            }
+            return ranking.getRanking();
+        }
     }
 
     @Override

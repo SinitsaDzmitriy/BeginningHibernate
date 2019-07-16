@@ -80,4 +80,9 @@ public class TestRanking {
         // Throws EntityNotFoundException if the Ranking is deleted successfully.
         service.getRanking(SUBJECT_NAME, OBSERVERS_NAME[3], SKILL_NAME);
     }
+
+    @Test(dependsOnMethods = "deleteExistentRanking")
+    public void deleteNonexistentRanking() {
+        service.deleteRanking(SUBJECT_NAME, OBSERVERS_NAME[3], SKILL_NAME);
+    }
 }

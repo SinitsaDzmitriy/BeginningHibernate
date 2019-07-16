@@ -37,8 +37,8 @@ public class RankingServiceImpl implements IRankingService {
     }
 
     @Override
-    public Ranking findRanking(String subject, String observer, String skill) {
-        return new Ranking();
+    public int getRanking(String subject, String observer, String skill) {
+        return 0;
     }
 
     @Override

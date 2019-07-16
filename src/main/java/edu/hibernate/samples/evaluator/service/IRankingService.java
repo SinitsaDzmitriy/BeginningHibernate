@@ -4,7 +4,7 @@ import edu.hibernate.samples.evaluator.model.domain.Ranking;
 
 public interface IRankingService {
     void addRanking(String subject, String observer, String skill, int ranking);
-    Ranking findRanking(String subject, String observer, String skill);
+    int getRanking(String subject, String observer, String skill);
     int getAverageRanking(String subject, String skill);
     void updateRanking(String subject, String observer, String skill, int updatedRanking);
 }

@@ -28,8 +28,7 @@ public class TestRanking {
                 "swordplay", INITIAL_RANKING);
 
         int currentRanking = service
-                .findRanking("John Snow", "Baristan Selmy", "swordplay")
-                .getRanking();
+                .getRanking("John Snow", "Baristan Selmy", "swordplay");
 
         Assert.assertEquals(currentRanking, INITIAL_RANKING);
 
@@ -37,14 +36,19 @@ public class TestRanking {
                 "swordplay", UPDATED_RANKING);
 
         currentRanking = service
-                .findRanking("John Snow", "Baristan Selmy", "swordplay")
-                .getRanking();
+                .getRanking("John Snow", "Baristan Selmy", "swordplay");
 
         Assert.assertEquals(currentRanking, UPDATED_RANKING);
     }
 
     @Test
     public void updateNonexistentRanking() {
+        final int RANKING_VALUE = 6;
 
+        service.updateRanking("John Snow", "Baristan Selmy",
+                "swordplay", RANKING_VALUE);
+
+        Assert.assertEquals(RANKING_VALUE,
+                service.getRanking("John Snow", "Baristan Selmy", "swordplay"));
     }
 }

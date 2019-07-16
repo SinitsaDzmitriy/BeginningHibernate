@@ -34,7 +34,7 @@
         <Logger name="edu.sam.spittr.controller" level="DEBUG">
             <AppenderRef ref="Logbook"/>
         </Logger>
-        
+
         <Logger name="org.hibernate.type" level="TRACE"/>
 
     </Loggers>

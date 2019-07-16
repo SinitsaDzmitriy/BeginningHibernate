@@ -19,7 +19,7 @@ public class Phone {
             (optional) foreignKey - used to specify or control the generation of a foreign key constraint when table
         generation is in effect.
 
-            The @JoinColumn annotation is used to specify the handling of foreign key constraints when schema generation
+            The @ForeignKey annotation is used to specify the handling of foreign key constraints when schema generation
         is in effect. If this annotation is not specified, the persistence provider's default foreign key strategy will
         be used. The optional String name attribute specifies the name of the foreign key constraint.
 

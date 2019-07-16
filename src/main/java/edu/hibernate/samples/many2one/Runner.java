@@ -22,6 +22,10 @@ public class Runner {
             phone.setPerson(person);
             session.persist(phone);
             trans.commit();
+
+            trans = session.beginTransaction();
+            phone.setPerson(null);
+            trans.commit();
         }
     }
 }

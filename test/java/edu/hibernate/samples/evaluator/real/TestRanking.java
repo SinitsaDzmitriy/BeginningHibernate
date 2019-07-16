@@ -5,11 +5,18 @@ import edu.hibernate.samples.evaluator.service.RankingServiceImpl;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.persistence.EntityNotFoundException;
+
 public class TestRanking {
     private IRankingService service;
 
     public TestRanking() {
         service = new RankingServiceImpl();
+    }
+
+    @Test(expectedExceptions = EntityNotFoundException.class)
+    public void getNonexistentRanking() {
+        service.getRanking("John Snow", "Samwell Tarly", "swordplay");
     }
 
     @Test

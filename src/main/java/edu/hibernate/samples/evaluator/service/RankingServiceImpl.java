@@ -89,5 +89,35 @@ public class RankingServiceImpl implements IRankingService {
     }
 
     @Override
-    public void updateRanking(String subject, String observer, String skill, int updatedRanking) {}
+    public void updateRanking(String subject, String observer, String skill, int updatedRanking) {
+        try (Session session = SessionUtil.getSession()) {
+            Transaction trans = session.beginTransaction();
+
+            Ranking ranking = getRanking(session, subject, observer, skill);
+
+            if(ranking == null) {
+                addRanking(subject, observer, skill, updatedRanking);
+            } else {
+                ranking.setRanking(updatedRanking);
+            }
+
+            trans.commit();
+        }
+    }
+
+    private Ranking getRanking(Session session, String subject, String observer, String skill) {
+
+        Query<Ranking> query = session
+                .createQuery("from Ranking r " +
+                                "where r.subject.name=:subjectName " +
+                                "and r.observer.name=:observerName " +
+                                "and r.skill.name=:skillName",
+                        Ranking.class);
+
+        query.setParameter("subjectName", subject);
+        query.setParameter("observerName", observer);
+        query.setParameter("skillName", skill);
+
+        return query.uniqueResult();
+    }
 }

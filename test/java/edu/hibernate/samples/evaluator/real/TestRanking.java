@@ -19,7 +19,7 @@ public class TestRanking {
         service.getRanking("John Snow", "Samwell Tarly", "swordplay");
     }
 
-    @Test
+    @Test (dependsOnMethods = "addAndGetRanking", alwaysRun = true)
     public void addAndGetRanking() {
         service.addRanking("John Snow", "Samwell Tarly",
                 "swordplay", 9);

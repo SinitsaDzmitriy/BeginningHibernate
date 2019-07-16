@@ -13,13 +13,13 @@ public class TestRanking {
     }
 
     @Test
-    public void addRanking() {
+    public void addAndGetRanking() {
         service.addRanking("John Snow", "Samwell Tarly",
                 "swordplay", 9);
-        Assert.assertEquals(service.getAverageRanking("John Snow", "swordplay"), 9);
+        Assert.assertEquals(service.getRanking("John Snow", "Samwell Tarly", "swordplay"), 9);
     }
 
-    @Test
+    @Test(dependsOnMethods = "addAndGetRanking")
     public void updateExistentRanking() {
         final int INITIAL_RANKING = 5;
         final int UPDATED_RANKING = 6;
@@ -41,7 +41,7 @@ public class TestRanking {
         Assert.assertEquals(currentRanking, UPDATED_RANKING);
     }
 
-    @Test
+    @Test(dependsOnMethods = "addAndGetRanking")
     public void updateNonexistentRanking() {
         final int RANKING_VALUE = 6;
 

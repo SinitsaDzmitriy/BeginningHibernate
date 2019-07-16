@@ -41,10 +41,10 @@ public class RankingServiceImpl implements IRankingService {
     public int getRanking(String subject, String observer, String skill) {
         try (Session session = SessionUtil.getSession()) {
             Query<Ranking> query = session
-                    .createQuery("from Ranking r " +
-                                    "where r.subject.name=:subjectName " +
-                                    "and r.observer.name=:observerName " +
-                                    "and r.skill.name=:skillName",
+                    .createQuery("from Ranking r "
+                                    + "where r.subject.name=:subjectName "
+                                    + "and r.observer.name=:observerName "
+                                    + "and r.skill.name=:skillName",
                             Ranking.class);
 
             query.setParameter("subjectName", subject);
@@ -69,23 +69,27 @@ public class RankingServiceImpl implements IRankingService {
     @Override
     public int getAverageRanking(String subject, String skill) {
         try (Session session = SessionUtil.getSession()) {
-                Query<Ranking> query = session
-                        .createQuery("from Ranking r where r.subject.name=:subjectName and r.skill.name=:skillName",
-                                Ranking.class);
-                query.setParameter("subjectName", subject);
-                query.setParameter("skillName", skill);
+            Query<Ranking> query = session
+                    .createQuery("from Ranking r where r.subject.name=:subjectName and r.skill.name=:skillName",
+                            Ranking.class);
+            query.setParameter("subjectName", subject);
+            query.setParameter("skillName", skill);
 
-                OptionalDouble avg = query
-                        .list()
-                        .stream()
-                        .mapToInt(Ranking::getRanking)
-                        .average();
+            OptionalDouble avg = query
+                    .list()
+                    .stream()
+                    .mapToInt(Ranking::getRanking)
+                    .average();
 
-                if (!avg.isPresent()) {
-                    throw new IllegalArgumentException("Empty response for the query.");
-                }
-                return (int) Math.round(avg.getAsDouble());
+            if (!avg.isPresent()) {
+                throw new IllegalArgumentException("Empty response for the query.");
+            }
+            return (int) Math.round(avg.getAsDouble());
         }
+    }
+
+    @Override
+    public void deleteRanking(String subject, String observer, String skill) {
     }
 
     @Override
@@ -95,7 +99,7 @@ public class RankingServiceImpl implements IRankingService {
 
             Ranking ranking = getRanking(session, subject, observer, skill);
 
-            if(ranking == null) {
+            if (ranking == null) {
                 addRanking(subject, observer, skill, updatedRanking);
             } else {
                 ranking.setRanking(updatedRanking);
@@ -108,10 +112,10 @@ public class RankingServiceImpl implements IRankingService {
     private Ranking getRanking(Session session, String subject, String observer, String skill) {
 
         Query<Ranking> query = session
-                .createQuery("from Ranking r " +
-                                "where r.subject.name=:subjectName " +
-                                "and r.observer.name=:observerName " +
-                                "and r.skill.name=:skillName",
+                .createQuery("from Ranking r "
+                                + "where r.subject.name=:subjectName "
+                                + "and r.observer.name=:observerName "
+                                + "and r.skill.name=:skillName",
                         Ranking.class);
 
         query.setParameter("subjectName", subject);

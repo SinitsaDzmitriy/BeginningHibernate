@@ -15,7 +15,8 @@ public class TestRanking {
     private final String[] OBSERVERS_NAME =
             {"Samwell Tarly",
             "Baristan Selmy",
-            "Stannis Baratheon"};
+            "Stannis Baratheon",
+            "Meryn Trant"};
 
     private final String SKILL_NAME = "swordplay";
 
@@ -65,5 +66,18 @@ public class TestRanking {
                 .getRanking(SUBJECT_NAME, OBSERVERS_NAME[2], SKILL_NAME);
 
         Assert.assertEquals(currentRanking, UPDATED_RANKING);
+    }
+
+    @Test(dependsOnMethods = "addAndGetRanking", expectedExceptions = EntityNotFoundException.class)
+    public void deleteExistentRanking() {
+        final int RANKING_VALUE = 8;
+
+        // Adds a new Ranking (correct as tested before)
+        service.addRanking(SUBJECT_NAME, OBSERVERS_NAME[3], SKILL_NAME, RANKING_VALUE);
+
+        service.deleteRanking(SUBJECT_NAME, OBSERVERS_NAME[3], SKILL_NAME);
+
+        // Throws EntityNotFoundException if the Ranking is deleted successfully.
+        service.getRanking(SUBJECT_NAME, OBSERVERS_NAME[3], SKILL_NAME);
     }
 }

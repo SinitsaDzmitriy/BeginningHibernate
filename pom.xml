@@ -89,6 +89,13 @@
             <version>2.11.2</version>
         </dependency>
 
+        <!-- database data logging -->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

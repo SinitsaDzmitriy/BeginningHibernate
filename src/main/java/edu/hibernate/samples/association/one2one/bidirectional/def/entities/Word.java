@@ -1,4 +1,4 @@
-package edu.hibernate.samples.association.one2one.bidirectional.entities;
+package edu.hibernate.samples.association.one2one.bidirectional.def.entities;
 
 import javax.persistence.*;
 
@@ -58,6 +58,10 @@ public class Word {
 
     public String getContent() {
         return content;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void addPron(Pronunciation pron) {

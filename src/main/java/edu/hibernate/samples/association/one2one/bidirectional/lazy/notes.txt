@@ -1,0 +1,20 @@
+    Although you might annotate the parent-side association to be fetched lazily,
+Hibernate cannot honor this request since it cannot know whether the association is
+null or not.
+    The only way to figure out whether there is an associated record on the child
+side is to fetch the child association using a secondary query. Because this can
+lead to N+1 query issues, it’s much more efficient to use unidirectional @OneToOne
+associations with the @MapsId annotation in place.
+    However, if you really need to use a bidirectional association and want to
+make sure that this is always going to be fetched lazily, then you need to enable
+lazy state initialization bytecode enhancement and use the @LazyToOne annotation
+as well.
+
+
+to honor a request - выполнить просьбу
+to figure out - понимать, постигать
+an issue - выпуск (создание и выолнение)
+in place - кое-где
+to enable - делать возможным
+an enhancement - улучшение, усовершенствование
+

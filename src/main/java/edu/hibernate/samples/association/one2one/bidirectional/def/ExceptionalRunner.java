@@ -1,7 +1,7 @@
-package edu.hibernate.samples.association.one2one.bidirectional;
+package edu.hibernate.samples.association.one2one.bidirectional.def;
 
-import edu.hibernate.samples.association.one2one.bidirectional.entities.Pronunciation;
-import edu.hibernate.samples.association.one2one.bidirectional.entities.Word;
+import edu.hibernate.samples.association.one2one.bidirectional.def.entities.Pronunciation;
+import edu.hibernate.samples.association.one2one.bidirectional.def.entities.Word;
 import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -25,6 +25,10 @@ public class ExceptionalRunner {
             trans = session.beginTransaction();
             session.persist(usPron);
             trans.commit();
+
+            session.clear();
+
+            word = session.find(Word.class, word.getId());
         }
     }
 }

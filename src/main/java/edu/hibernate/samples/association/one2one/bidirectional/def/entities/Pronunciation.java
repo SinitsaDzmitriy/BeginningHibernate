@@ -1,4 +1,4 @@
-package edu.hibernate.samples.association.one2one.bidirectional.entities;
+package edu.hibernate.samples.association.one2one.bidirectional.def.entities;
 
 import javax.persistence.*;
 

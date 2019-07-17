@@ -1,0 +1,6 @@
+    The @OneToMany association links a parent entity with one or more child
+entities.
+    If there is no @ManyToOne association on the child side, the @OneToMany
+association is unidirectional.
+    Otherwise it's bidirectional and the application developer can navigate this
+relationship from both ends.

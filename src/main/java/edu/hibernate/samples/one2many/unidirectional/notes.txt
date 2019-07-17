@@ -1,0 +1,8 @@
+    When using a unidirectional @OneToMany association, Hibernate resorts to using
+a link table between the two joining entities.
+    A parent entity object (Person) contains a collection (List) of coupled child
+(Phone) instances.
+
+to resort - обращаться
+to resort to - обращаться за помощью, прибегать к
+to join - соединять, связывать

@@ -10,6 +10,12 @@ import edu.hibernate.samples.many2one.entities.Phone;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+/*
+    Many2one: A child entity refers to a parent.
+    Phone entity object contains Person as a field.
+    Phone table contains column person_id with Person's primary keys.
+*/
+
 public class Runner {
     public static void main(String[] args) {
         try (Session session = SessionUtil.getSession()) {

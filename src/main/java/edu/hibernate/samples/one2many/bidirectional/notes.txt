@@ -1,0 +1,11 @@
+    The bidirectional @OneToMany association also requires a @ManyToOne association
+on the child side. Although the Domain Model exposes two sides to navigate this
+association, behind the scenes, the relational database has only one foreign key
+for this relationship.
+    Every BIDIRECTIONAL association must have one owning side only (the child
+side), the other one being referred to as the inverse (or the mappedBy) side.
+
+to expose - выставлять, подвергать действию (предоставлять)
+behind the scenes - за кулисами
+to refer - ссылаться
+inverse - противоположный

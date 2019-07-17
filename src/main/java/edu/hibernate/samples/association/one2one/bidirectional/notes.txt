@@ -1,0 +1,5 @@
+    A bidirectional association features a mappedBy @OneToOne parent side too.
+    This time, the Pronunciation owns the association. Although object model implements the bidirectional association,
+but only the Pronunciation table contains the foreign key.
+
+    to feature - отличать(ся)

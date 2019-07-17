@@ -1,4 +1,4 @@
     A unidirectional association follows the relational database foreign key semantics, the client-side owning the
 relationship.
-
-A bidirectional association features a mappedBy @OneToOne parent side too.
+    In this example the Word owns the association. The word class contains a Pronunciation entity object as a field. The
+word entity has the word_id column which refers to the Pronunciation table.

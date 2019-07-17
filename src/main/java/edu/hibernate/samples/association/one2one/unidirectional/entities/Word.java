@@ -4,12 +4,12 @@ import javax.persistence.*;
 
 
 @Entity
-public class Phone {
+public class Word {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String number;
+    private String content;
 
     /*
             The @JoinColumn annotation is used to specify the FOREIGN KEY column used when joining an entity association
@@ -31,23 +31,31 @@ public class Phone {
         to be in effect - быть в процессе выполнения, выполняться
     */
 
-    @OneToOne
-    @JoinColumn(name = "details_id", foreignKey = @ForeignKey(name = "DETAILS_ID_FK"))
-    private PhoneDetails details;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "pron_id", foreignKey = @ForeignKey(name = "PRON_ID_FK"), unique = true)
+    private Pronunciation pron;
 
-    public Phone() {
+    public Word() {
     }
 
-    public Phone(String number) {
-        this.number = number;
+    public Word(String content, Pronunciation pron) {
+        this.pron = pron;
+        this.content = content;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getNumber() {
-        return number;
+    public String getContent() {
+        return content;
     }
 
+    public void setPron(Pronunciation pron) {
+        this.pron = pron;
+    }
+
+    public Pronunciation getPron() {
+        return pron;
+    }
 }

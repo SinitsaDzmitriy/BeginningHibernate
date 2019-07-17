@@ -2,7 +2,23 @@
 a link table between the two joining entities.
     A parent entity object (Person) contains a collection (List) of coupled child
 (Phone) instances.
+    When persisting the Person entity, the cascade will propagate the persist
+operation to the underlying Phone children as well. Upon removing a Phone from
+the phones collection, the association row is deleted from the link table, and
+the orphanRemoval attribute will trigger a Phone removal as well.
+    The unidirectional associations are not very efficient when it comes to
+removing child entities. In the example above, upon flushing the persistence
+context, Hibernate deletes all database rows from the link table (Person_Phone)
+that are associated with the parent Person entity and reinserts the ones that
+are still found in the @OneToMany collection.
+    On the other hand, a bidirectional @OneToMany association is much more
+efficient because the child entity controls the association.
 
 to resort - обращаться
 to resort to - обращаться за помощью, прибегать к
 to join - соединять, связывать
+to propagate - распростронять(ся)
+underlying - лежащий в основе, скрытый
+upon sth, ... - при чем-то, ...
+an orphan - сирота
+to flush - очищать (выгружать)

@@ -1,4 +1,4 @@
-package edu.hibernate.samples.many2many.unidirectional.entities;
+package edu.hibernate.samples.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

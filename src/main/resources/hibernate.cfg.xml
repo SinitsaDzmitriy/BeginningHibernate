@@ -23,17 +23,17 @@
         -->
 
         <!--
-        <mapping class="edu.hibernate.samples.many2one.entities.Person"/>
-        <mapping class="edu.hibernate.samples.many2one.entities.Phone"/>
+        <mapping class="edu.hibernate.samples.association.many2one.entities.Person"/>
+        <mapping class="edu.hibernate.samples.association.many2one.entities.Phone"/>
         -->
 
         <!--
-        <mapping class="edu.hibernate.samples.one2many.unidirectional.entities.Person"/>
-        <mapping class="edu.hibernate.samples.one2many.unidirectional.entities.Phone"/>
+        <mapping class="edu.hibernate.samples.association.one2many.unidirectional.entities.Person"/>
+        <mapping class="edu.hibernate.samples.association.one2many.unidirectional.entities.Phone"/>
         -->
 
-        <mapping class="edu.hibernate.samples.one2many.bidirectional.entities.Person"/>
-        <mapping class="edu.hibernate.samples.one2many.bidirectional.entities.Phone"/>
+        <mapping class="edu.hibernate.samples.association.one2many.bidirectional.entities.Person"/>
+        <mapping class="edu.hibernate.samples.association.one2many.bidirectional.entities.Phone"/>
 
     </session-factory>
 </hibernate-configuration>

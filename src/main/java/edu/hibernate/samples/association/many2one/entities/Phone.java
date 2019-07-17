@@ -1,4 +1,4 @@
-package edu.hibernate.samples.many2one.entities;
+package edu.hibernate.samples.association.many2one.entities;
 
 import javax.persistence.*;
 

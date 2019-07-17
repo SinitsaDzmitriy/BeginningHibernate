@@ -1,4 +1,4 @@
-package edu.hibernate.samples.one2many.bidirectional.entities;
+package edu.hibernate.samples.association.one2many.bidirectional.entities;
 
 import javax.persistence.*;
 import java.util.ArrayList;

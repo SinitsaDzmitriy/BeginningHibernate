@@ -1,12 +1,12 @@
-package edu.hibernate.samples.many2one;
+package edu.hibernate.samples.association.many2one;
 
 /*
 
 */
 
 import edu.hibernate.samples.evaluator.util.SessionUtil;
-import edu.hibernate.samples.many2one.entities.Person;
-import edu.hibernate.samples.many2one.entities.Phone;
+import edu.hibernate.samples.association.many2one.entities.Person;
+import edu.hibernate.samples.association.many2one.entities.Phone;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

@@ -1,0 +1,53 @@
+package edu.hibernate.samples.association.one2one.unidirectional.entities;
+
+import javax.persistence.*;
+
+
+@Entity
+public class Phone {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    private String number;
+
+    /*
+            The @JoinColumn annotation is used to specify the FOREIGN KEY column used when joining an entity association
+        or an embeddable collection.
+            Attributes:
+            (optional) String name - the name of the foreign key column
+            (optional) foreignKey - used to specify or control the generation of a foreign key constraint when table
+        generation is in effect.
+
+            The @ForeignKey annotation is used to specify the handling of foreign key constraints when schema generation
+        is in effect. If this annotation is not specified, the persistence provider's default foreign key strategy will
+        be used. The optional String name attribute specifies the name of the foreign key constraint.
+
+            Thus the table related to the Phone entity will contain the details_id column and has Derails' foreign key
+        constraint on it.
+
+        embeddable - встраиваемый
+        an effect - осуществление, выполнение
+        to be in effect - быть в процессе выполнения, выполняться
+    */
+
+    @OneToOne
+    @JoinColumn(name = "details_id", foreignKey = @ForeignKey(name = "DETAILS_ID_FK"))
+    private PhoneDetails details;
+
+    public Phone() {
+    }
+
+    public Phone(String number) {
+        this.number = number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+}

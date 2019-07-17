@@ -27,7 +27,7 @@ add constraint FK2ex4e4p7w1cj310kg2woisjl2 foreign key (Person_id) references Pe
 insert into Person
 (name, id)
 values
-("Sinitsa Dzmitry", 1);
+('Sinitsa Dzmitry', 1);
 
 insert into Phone
 (number, id)

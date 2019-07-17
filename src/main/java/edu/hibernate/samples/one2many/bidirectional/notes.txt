@@ -4,8 +4,27 @@ association, behind the scenes, the relational database has only one foreign key
 for this relationship.
     Every BIDIRECTIONAL association must have one owning side only (the child
 side), the other one being referred to as the inverse (or the mappedBy) side.
+    Whenever a BIDIRECTIONAL association is formed, the application developer
+must make sure both sides are in-sync at all times.
+    In this example the addPhone() and removePhone() are utility methods that
+synchronize both ends whenever a child element is added or removed.
+    Because the Phone class has a @NaturalId column (the phone number being
+unique), the equals() and the hashCode() can make use of this property, and so
+the removePhone() logic is reduced to the remove() Java Collection method.
+    There is no a link table as in the unidirectional @OneToMany association.
+    Unlike the unidirectional @OneToMany, the bidirectional association is much
+more efficient when managing the collection persistence state. Every element
+removal only requires a single update (in which the foreign key column is set to
+NULL), and, if the child entity lifecycle is bound to its owning parent so that
+the child cannot exist without its parent, then we can annotate the association
+with the orphan-removal attribute and dissociate the child will trigger a delete
+statement on the actual child table row as well.
 
 to expose - выставлять, подвергать действию (предоставлять)
 behind the scenes - за кулисами
 to refer - ссылаться
 inverse - противоположный
+in-sync - синхронизированный
+to dissociate - отделять, разъединять
+to trigger - инициировать, вызывать
+

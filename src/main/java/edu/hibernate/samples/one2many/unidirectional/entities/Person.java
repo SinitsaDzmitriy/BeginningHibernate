@@ -1,4 +1,4 @@
-package edu.hibernate.samples.one2many.unidirectional.entites;
+package edu.hibernate.samples.one2many.unidirectional.entities;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

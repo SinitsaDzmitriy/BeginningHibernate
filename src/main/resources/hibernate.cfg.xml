@@ -19,16 +19,21 @@
         <!-- List of entities: -->
 
         <!--
+        <mapping class="edu.hibernate.samples.messenger.model.domain.Message"/>
+        -->
+
+        <!--
         <mapping class="edu.hibernate.samples.many2one.entities.Person"/>
         <mapping class="edu.hibernate.samples.many2one.entities.Phone"/>
         -->
 
-        <mapping class="edu.hibernate.samples.one2many.unidirectional.entites.Person"/>
-        <mapping class="edu.hibernate.samples.one2many.unidirectional.entites.Phone"/>
-
         <!--
-        <mapping class="edu.hibernate.samples.messenger.model.domain.Message"/>
+        <mapping class="edu.hibernate.samples.one2many.unidirectional.entities.Person"/>
+        <mapping class="edu.hibernate.samples.one2many.unidirectional.entities.Phone"/>
         -->
+
+        <mapping class="edu.hibernate.samples.one2many.bidirectional.entities.Person"/>
+        <mapping class="edu.hibernate.samples.one2many.bidirectional.entities.Phone"/>
 
     </session-factory>
 </hibernate-configuration>

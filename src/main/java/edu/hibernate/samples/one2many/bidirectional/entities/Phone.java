@@ -1,4 +1,4 @@
-package edu.hibernate.samples.one2many.bidirectional.entites;
+package edu.hibernate.samples.one2many.bidirectional.entities;
 
 import org.hibernate.annotations.NaturalId;
 

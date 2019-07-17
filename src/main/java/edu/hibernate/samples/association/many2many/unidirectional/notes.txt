@@ -1,0 +1,28 @@
+    The link table is controlled by the owning side (Person).
+    When an entity is removed from the @ManyToMany collection, Hibernate simply
+deletes the joining record in the link table. Unfortunately, this operation
+requires removing all entries associated with a given parent and recreating the
+ones that are listed in the current running persistent context.
+    For @ManyToMany associations, the REMOVE entity state transition doesn’t make
+sense to be cascaded because it will propagate beyond the link table. Since the
+other side might be referenced by other entities on the parent-side, the automatic
+removal might end up in a ConstraintViolationException.
+    For example, if @ManyToMany(cascade = CascadeType.ALL) was defined and the
+first person would be deleted, Hibernate would throw an exception because another
+person is still associated with the address that’s being deleted.
+    Person person = session.find(Person.class, personId);
+    session.remove(person);
+    Caused by: javax.persistence.PersistenceException:
+        org.hibernate.exception.ConstraintViolationException:
+            could not execute statement
+    Caused by: org.hibernate.exception.ConstraintViolationException:
+        could not execute statement
+    Caused by: java.sql.SQLIntegrityConstraintViolationException:
+        integrity constraint violation:
+        foreign key no action;
+        FKM7J0BNABH2YR0PE99IL1D066U table: PERSON_ADDRESS
+
+a joining record - связующая запись
+to list in - содержаться, числиться в
+beyond - за пределы
+to end up in sth - завершаться, оканчиваться чем-то

@@ -47,8 +47,15 @@
         <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.Pronunciation"/>
         -->
 
+
         <mapping class="edu.hibernate.samples.association.many2many.unidirectional.entities.Person"/>
         <mapping class="edu.hibernate.samples.association.many2many.unidirectional.entities.Address"/>
+
+
+        <!--
+        <mapping class="edu.hibernate.samples.association.many2many.bidirectional.entities.Person"/>
+        <mapping class="edu.hibernate.samples.association.many2many.bidirectional.entities.Address"/>
+        -->
 
     </session-factory>
 </hibernate-configuration>

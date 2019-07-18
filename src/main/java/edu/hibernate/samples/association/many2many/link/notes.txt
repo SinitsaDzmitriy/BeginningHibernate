@@ -1,0 +1,5 @@
+    To most natural @ManyToMany association follows the same logic employed by the
+database schema, and the link table has an associated entity which controls the
+relationship for both sides that need to be joined.
+
+    to employ - использовать, применять.

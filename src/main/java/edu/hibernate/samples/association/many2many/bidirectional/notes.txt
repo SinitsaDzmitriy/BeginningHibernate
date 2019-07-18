@@ -1,5 +1,10 @@
     A bidirectional @ManyToMany association has an owning and a mappedBy side. To
 preserve synchronicity between both sides, it’s good practice to provide helper
 methods for adding or removing child entities.
+    If a bidirectional @OneToMany association performs better when removing or
+changing the order of child elements, the @ManyToMany relationship cannot benefit
+from such an optimization because the foreign key side is not in control. To
+overcome this limitation, the link table must be directly exposed and the
+@ManyToMany association split into two bidirectional @OneToMany relationships.
 
     to preserve - сохранять, поддерживать

@@ -46,6 +46,10 @@ public class Person implements Serializable {
         this.passportNumber = passportNumber;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -68,7 +72,7 @@ public class Person implements Serializable {
         address.addOwner(personAddress);
     }
 
-    public void removeApartment(Address address) {
+    public void removeAddress(Address address) {
         PersonAddress personAddress = new PersonAddress(this, address);
         address.removeOwner(personAddress);
         addresses.remove(personAddress);

@@ -36,6 +36,10 @@ public class Address implements Serializable {
             orphanRemoval = true)
     private List<PersonAddress> owners = new ArrayList<>();
 
+    public Long getId() {
+        return id;
+    }
+
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }

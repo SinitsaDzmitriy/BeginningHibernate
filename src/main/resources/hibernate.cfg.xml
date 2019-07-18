@@ -57,9 +57,15 @@
         <mapping class="edu.hibernate.samples.association.many2many.bidirectional.entities.Address"/>
         -->
 
+        <!--
         <mapping class="edu.hibernate.samples.association.many2many.link.entities.Person"/>
         <mapping class="edu.hibernate.samples.association.many2many.link.entities.Address"/>
         <mapping class="edu.hibernate.samples.association.many2many.link.entities.PersonAddress"/>
+        -->
+
+        <mapping class="edu.hibernate.samples.aveng.entities.Card"/>
+        <mapping class="edu.hibernate.samples.aveng.entities.CardMapping"/>
+
 
     </session-factory>
 </hibernate-configuration>

@@ -9,22 +9,39 @@ import org.hibernate.Transaction;
 public class Runner {
     public static void main(String[] args) {
         try (Session session = SessionUtil.getSession()) {
-            Person son = new Person("Son Name", "SN0000000");
-            Person dad = new Person("Dad Name", "DN0000000");
+
             Person homeless = new Person("Homeless Name", "HN0000000");
-
-            Address hostel = new Address("hostel", 3, "000001");
-            Address familyNest = new Address("family house", 5, "000002");
-
-            son.addAddress(familyNest);
-            son.addAddress(hostel);
-            dad.addAddress(familyNest);
-
+            Address dump = new Address("dump", 0, "none");
+            Address hospital = new Address("hospital", 10, "0000001");
 
             Transaction trans = session.beginTransaction();
 
-            session.persist(son);
-            session.persist(dad);
+            session.persist(homeless);
+            session.persist(dump);
+            session.persist(hospital);
+
+            homeless.addAddress(dump);
+            homeless.addAddress(hospital);
+
+            trans.commit();
+
+            session.clear();
+
+            trans = session.beginTransaction();
+
+            Person person = session.find(Person.class, homeless.getId());
+            Address building = session.find(Address.class, hospital.getId());
+
+            person.removeAddress(building);
+
+            trans.commit();
+
+            session.clear();
+
+            trans = session.beginTransaction();
+
+            person = session.find(Person.class, homeless.getId());
+            session.remove(person);
 
             trans.commit();
 
@@ -43,7 +60,7 @@ public class Runner {
 //            session.persist(familyNest);
 //            session.persist(dad);
 //            dad.addAddress(familyNest);
-//            son.removeApartment(hostel);
+//            son.removeAddress(hostel);
 //            trans.commit();
         }
     }

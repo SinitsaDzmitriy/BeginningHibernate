@@ -1,21 +1,26 @@
 package edu.hibernate.samples.aveng.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class CardMapping {
+@Table(name = "card_mappings", uniqueConstraints =
+    @UniqueConstraint(name = "SOURCE_DEST_UQ", columnNames = {"source_card_id", "dest_card_id"}))
+public class CardMapping implements Serializable {
+    private Double frequency;
+
     @Id
     @GeneratedValue
     private Long id;
 
-    private Double frequency;
-
     @ManyToOne
+    @JoinColumn(name = "source_card_id", foreignKey =
+        @ForeignKey(name = "SOURCE_CARD_ID_FK"))
     private Card sourceCard;
 
     @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "dest_card_id", unique = true, foreignKey =
+    @JoinColumn(name = "dest_card_id", foreignKey =
         @ForeignKey(name = "DEST_CARD_ID_FK"))
     private Card destCard;
 

@@ -25,12 +25,14 @@ public class Runner {
 
             cards.add(new Card("en", "auto", "a car"));
 
-            cards.get(0).addMapping(cards.get(1), 1);
-            cards.get(0).addMapping(cards.get(2), 0.8);
-
             Transaction trans = session.beginTransaction();
 
             session.persist(cards.get(0));
+            session.persist(cards.get(1));
+            session.persist(cards.get(2));
+
+            cards.get(0).addMapping(cards.get(1), 1);
+            cards.get(0).addMapping(cards.get(2), 0.8);
 
             trans.commit();
 
@@ -39,7 +41,8 @@ public class Runner {
             trans = session.beginTransaction();
 
             Card card = session.find(Card.class, cards.get(0).getId());
-            List<Card> relatedCards = card.getRelatedCards();
+            card.removeMapping(cards.get(1));
+//            List<Card> relatedCards = card.getRelatedCards();
 
             trans.commit();
 

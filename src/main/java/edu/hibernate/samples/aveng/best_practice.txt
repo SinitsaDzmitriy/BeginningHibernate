@@ -1,0 +1,25 @@
+    Use surrogate keys and let Hibernate generate new values
+
+    The main advantage of a surrogate primary key (or technical ID) is that it is
+one simple number and not a combination of multiple attributes as most natural
+keys. All involved systems, mainly Hibernate and the database, can handle it very
+efficiently. Hibernate can also use existing database features, like sequences or
+auto-incremented columns, to generate unique values for new entities.
+
+    technical - формальный
+    surrogate - суррогатный, искусственный
+    to involve - вовлекать, задействовать
+
+    Specify natural identifier
+
+    You should specify natural identifiers, even if you decide to use a surrogate
+key as your primary key. A natural identifier nevertheless identifies a database
+record and an object in the real world. A lot of use cases use them instead of an
+artificial, surrogate key. It is, therefore, good practice to model them as
+unique keys in your database. Hibernate also allows you to model them as a
+natural identifier of an entity and provides an extra API for retrieving them
+from the database.
+    The only thing you have to do to model an attribute is a natural id, is to
+annotate it with @NaturalId.
+
+    nevertheless - всё же

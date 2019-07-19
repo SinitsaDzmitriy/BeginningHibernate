@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@Table(name = "types")
 public class Type {
     @Id
     @GeneratedValue

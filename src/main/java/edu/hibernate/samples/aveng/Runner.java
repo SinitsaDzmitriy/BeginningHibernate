@@ -1,10 +1,11 @@
 package edu.hibernate.samples.aveng;
 
-import edu.hibernate.samples.aveng.entities.Card;
+import edu.hibernate.samples.aveng.entity.Card;
 
-import edu.hibernate.samples.aveng.entities.type.Type;
-import edu.hibernate.samples.aveng.entities.type.lang.English;
-import edu.hibernate.samples.aveng.entities.type.lang.Russian;
+import edu.hibernate.samples.aveng.entity.Lang;
+import edu.hibernate.samples.aveng.entity.Type;
+import edu.hibernate.samples.aveng.entity.enumeration.type.lang.English;
+import edu.hibernate.samples.aveng.entity.enumeration.type.lang.Russian;
 import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -17,9 +18,11 @@ public class Runner {
         try (Session session = SessionUtil.getSession()) {
             List<Card> cards = new ArrayList<>();
 
-            Type rusNoun = new Type(Russian.NOUN);
-            Type engNoun = new Type(English.NOUN);
+            Lang rus = new Lang("Russian", "Русский", "rus");
+            Lang eng = new Lang("English", "English", "eng");
 
+            Type rusNoun = new Type(rus, Russian.NOUN.getType());
+            Type engNoun = new Type(eng, English.NOUN.getType());
 
             cards.add(new Card(rusNoun, "машина",
                     "моторное дорожное транспортное средство, "

@@ -1,6 +1,4 @@
-package edu.hibernate.samples.aveng.entities;
-
-import edu.hibernate.samples.aveng.entities.type.Type;
+package edu.hibernate.samples.aveng.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +13,7 @@ public class Card {
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "type_id",
             foreignKey = @ForeignKey(name = "TYPE_ID_FK"))
     private Type type;

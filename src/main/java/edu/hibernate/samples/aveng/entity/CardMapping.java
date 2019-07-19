@@ -1,4 +1,4 @@
-package edu.hibernate.samples.aveng.entities;
+package edu.hibernate.samples.aveng.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

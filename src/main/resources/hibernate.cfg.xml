@@ -63,9 +63,10 @@
         <mapping class="edu.hibernate.samples.association.many2many.link.entities.PersonAddress"/>
         -->
 
-        <mapping class="edu.hibernate.samples.aveng.entities.Card"/>
-        <mapping class="edu.hibernate.samples.aveng.entities.CardMapping"/>
-        <mapping class="edu.hibernate.samples.aveng.entities.type.Type"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.Card"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.CardMapping"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.Type"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.Lang"/>
 
 
     </session-factory>

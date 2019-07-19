@@ -1,0 +1,22 @@
+    Naturally Hibernate also allows persisting collections. These persistent collections
+can contain almost any other Hibernate type, including basic types, custom types,
+embeddables, and references to other entities. In this context, the distinction between
+value and reference semantics is very important. An object in a collection might be
+handled with value semantics (its lifecycle being fully dependant on the collection
+owner), or it might be a reference to another entity with its own lifecycle. In the
+latter case, only the link between the two objects is considered to be a state held by
+the collection.
+
+    to persist - сохранять (продолжать существование)
+    a distinction - разница, отличие
+    семантика - смысловое значение
+    In the latter case, ... -  В последнем случае, ...
+    to consider - рассматривать, считать
+    to be considered to be - считаться
+
+    The owner of the collection is always an entity, even if the collection is defined
+by an embeddable type. Collections form one/many-to-many associations between types so
+there can be:
+    - value type collections
+    - embeddable type collections
+    - entity collections

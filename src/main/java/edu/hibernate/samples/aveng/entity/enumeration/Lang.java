@@ -1,4 +1,4 @@
-package edu.hibernate.samples.aveng.entities;
+package edu.hibernate.samples.aveng.entity.enumeration;
 
 public enum Lang {
 

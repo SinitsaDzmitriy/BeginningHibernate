@@ -1,6 +1,6 @@
 package edu.hibernate.samples.aveng.converter;
 
-import edu.hibernate.samples.aveng.entities.Lang;
+import edu.hibernate.samples.aveng.entity.enumeration.Lang;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

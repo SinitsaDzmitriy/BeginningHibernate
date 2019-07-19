@@ -1,6 +1,6 @@
-package edu.hibernate.samples.aveng.entities.type;
+package edu.hibernate.samples.aveng.entity.enumeration.type;
 
-import edu.hibernate.samples.aveng.entities.Lang;
+import edu.hibernate.samples.aveng.entity.enumeration.Lang;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -2,6 +2,9 @@ package edu.hibernate.samples.aveng;
 
 import edu.hibernate.samples.aveng.entities.Card;
 
+import edu.hibernate.samples.aveng.entities.type.Type;
+import edu.hibernate.samples.aveng.entities.type.lang.English;
+import edu.hibernate.samples.aveng.entities.type.lang.Russian;
 import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -14,16 +17,20 @@ public class Runner {
         try (Session session = SessionUtil.getSession()) {
             List<Card> cards = new ArrayList<>();
 
-            cards.add(new Card("ru", "машина",
+            Type rusNoun = new Type(Russian.NOUN);
+            Type engNoun = new Type(English.NOUN);
+
+
+            cards.add(new Card(rusNoun, "машина",
                     "моторное дорожное транспортное средство, "
                             + "используемое для перевозки людей или грузов."));
 
-            cards.add(new Card("en", "car",
+            cards.add(new Card(engNoun, "car",
                     "a road vehicle, typically with four wheels, "
                             + "powered by an internal combustion engine and "
                             + "able to carry a small number of people."));
 
-            cards.add(new Card("en", "auto", "a car"));
+            cards.add(new Card(engNoun, "auto", "a car"));
 
             Transaction trans = session.beginTransaction();
 

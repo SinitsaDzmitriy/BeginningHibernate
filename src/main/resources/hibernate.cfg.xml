@@ -65,6 +65,7 @@
 
         <mapping class="edu.hibernate.samples.aveng.entities.Card"/>
         <mapping class="edu.hibernate.samples.aveng.entities.CardMapping"/>
+        <mapping class="edu.hibernate.samples.aveng.entities.type.Type"/>
 
 
     </session-factory>

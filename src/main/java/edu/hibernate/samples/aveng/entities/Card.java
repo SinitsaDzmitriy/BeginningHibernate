@@ -1,5 +1,7 @@
 package edu.hibernate.samples.aveng.entities;
 
+import edu.hibernate.samples.aveng.entities.type.Type;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,10 @@ public class Card {
     @Column(nullable = false)
     private Long id;
 
-    private String lang;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "type_id",
+            foreignKey = @ForeignKey(name = "TYPE_ID_FK"))
+    private Type type;
 
     private String content;
     private String transcription;
@@ -27,8 +32,8 @@ public class Card {
     public Card() {
     }
 
-    public Card(String lang, String content, String definition) {
-        this.lang = lang;
+    public Card(Type type, String content, String definition) {
+        this.type = type;
         this.content = content;
         this.definition = definition;
     }
@@ -64,7 +69,7 @@ public class Card {
             return false;
         }
         Card card = (Card) o;
-        return Objects.equals(lang, card.lang)
+        return Objects.equals(type, card.type)
                 && Objects.equals(content, card.content)
                 && Objects.equals(transcription, card.transcription)
                 && Objects.equals(definition, card.definition);
@@ -72,6 +77,6 @@ public class Card {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lang, content, transcription, definition);
+        return Objects.hash(type, content, transcription, definition);
     }
 }

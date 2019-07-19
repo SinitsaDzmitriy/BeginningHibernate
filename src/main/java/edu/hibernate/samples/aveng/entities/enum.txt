@@ -1,0 +1,34 @@
+    Persisting enums with JPA 2.0 is possible, but there is no nice way to do it.
+Using the @Enumerated annotation, you can use EnumType.ORDINAL or EnumType.STRING
+to map the enum value to its database representation. But both options have their
+drawbacks. The ordinal of an Enum depends on the ordering of its values and can
+create problems, if we need to add new ones. The String representation of an Enum
+is often quite verbose and renaming a value will break the database mapping. These
+drawbacks can be avoided by using an Attribute Converter.
+
+    an ordinal - порядковое числительное
+    verbose - многословный, расятнутый
+
+    An Attribute Converter allows us to implement methods to convert the value of
+an entity attribute to its database representation and back.
+    By implementing our own mapping, we can choose a compact database
+representation and make sure, that changing the enum in any way will not break the
+existing mapping.
+    Therefore the shortName is added as an additional property to the Enum and
+will be used as its database representation. Methods to get the shortName property
+and to get the enum for a given shortName are also needed.
+    WATCH Lang CLASS!
+    Now the converter can be implemented to use the shortName property to store the
+Enum in the database.
+    WATCH LangConverter CLASS!
+    The SomeClassConverter maps the enum value to the shortName to store it in the
+database. By declaring it with @Converter(autoApply = true), we tell the JPA
+provider to use it to map all SomeClass enums. So we do not need to specify the
+converter for each entity attribute of type Vehicle.
+    Attribute Converter cannot be applied to attributes annotated with @Enumerated.
+So we have to make sure that there is no @Enumerated annotation at our entity
+attributes of type SomeClass.
+    We do not have to do anything to use a such converter in the app. The
+persistence provider will use it for all read and write operations.
+
+    to declare - объявлять

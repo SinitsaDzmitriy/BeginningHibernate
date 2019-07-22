@@ -1,20 +1,22 @@
 package edu.hibernate.samples.aveng;
 
-import edu.hibernate.samples.aveng.entity.Card;
+import edu.hibernate.samples.aveng.entity.*;
 
-import edu.hibernate.samples.aveng.entity.Lang;
-import edu.hibernate.samples.aveng.entity.Type;
 import edu.hibernate.samples.aveng.entity.enumeration.type.lang.English;
 import edu.hibernate.samples.aveng.entity.enumeration.type.lang.Russian;
 import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.engine.jdbc.BlobProxy;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Runner {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try (Session session = SessionUtil.getSession()) {
             List<Card> cards = new ArrayList<>();
 
@@ -24,25 +26,46 @@ public class Runner {
             Type rusNoun = new Type(rus, Russian.NOUN.getType());
             Type engNoun = new Type(eng, English.NOUN.getType());
 
-            cards.add(new Card(rusNoun, "машина",
-                    "моторное дорожное транспортное средство, "
-                            + "используемое для перевозки людей или грузов."));
+            Pronunciation mashinaPron = new Pronunciation("машына");
+            Pronunciation carPron = new Pronunciation("kɑ:");
+            Pronunciation autoPron = new Pronunciation("'ɔ:təʊ");
 
-            cards.add(new Card(engNoun, "car",
+            PronAudio mashinaAudio = new PronAudio(mashinaPron,
+                    BlobProxy.generateProxy(Files.readAllBytes(Paths
+                            .get("C:/Test/pronunciation_ru_машина.mp3"))));
+
+            PronAudio carAudio = new PronAudio(carPron,
+                    BlobProxy.generateProxy(Files.readAllBytes(Paths
+                            .get("C:/Test/pronunciation_en_car.mp3"))));
+
+            PronAudio autoAudio = new PronAudio(autoPron,
+                    BlobProxy.generateProxy(Files.readAllBytes(Paths
+                            .get("C:/Test/pronunciation_en_auto.mp3"))));
+
+            Card mashinaCard = new Card(rusNoun, "машина", mashinaPron,
+                    "моторное дорожное транспортное средство, "
+                            + "используемое для перевозки людей или грузов.");
+
+            Card carCard = new Card(engNoun, "car", carPron,
                     "a road vehicle, typically with four wheels, "
                             + "powered by an internal combustion engine and "
-                            + "able to carry a small number of people."));
+                            + "able to carry a small number of people.");
 
-            cards.add(new Card(engNoun, "auto", "a car"));
+            Card autoCard = new Card(engNoun, "auto", autoPron,
+                    "a car");
 
             Transaction trans = session.beginTransaction();
 
-            session.persist(cards.get(0));
-            session.persist(cards.get(1));
-            session.persist(cards.get(2));
+            session.persist(mashinaAudio);
+            session.persist(carAudio);
+            session.persist(autoAudio);
 
-            cards.get(0).addMapping(cards.get(1), 1);
-            cards.get(0).addMapping(cards.get(2), 0.8);
+            session.persist(mashinaCard);
+            session.persist(carCard);
+            session.persist(autoCard);
+
+            mashinaCard.addMapping(carCard, 1);
+            mashinaCard.addMapping(autoCard, 0.8);
 
             trans.commit();
 
@@ -50,15 +73,17 @@ public class Runner {
 
             trans = session.beginTransaction();
 
-            Card card = session.find(Card.class, cards.get(0).getId());
-            card.removeMapping(cards.get(1));
+            Card card = session.find(Card.class, mashinaCard.getId());
+            card.removeMapping(card);
 //            List<Card> relatedCards = card.getRelatedCards();
 
             trans.commit();
 
 //            session.clear();
 //            trans = session.beginTransaction();
-//
+
+
+
 //            trans.commit();
 
         }

@@ -64,17 +64,19 @@
         -->
 
         <!--
+        <mapping class="edu.hibernate.samples.largeobjects.entity.JpaMappedPronunciation"/>
+        -->
+
+        <!--
+        <mapping class="edu.hibernate.samples.largeobjects.entity.HiberMappedPronunciation"/>
+        -->
+
         <mapping class="edu.hibernate.samples.aveng.entity.Card"/>
         <mapping class="edu.hibernate.samples.aveng.entity.CardMapping"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Type"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Lang"/>
-        -->
-
-        <!--
-        <mapping class="edu.hibernate.samples.largeobjects.entity.JpaMappedPronunciation"/>
-        -->
-
-        <mapping class="edu.hibernate.samples.largeobjects.entity.HiberMappedPronunciation"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.Pronunciation"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.PronAudio"/>
 
     </session-factory>
 </hibernate-configuration>

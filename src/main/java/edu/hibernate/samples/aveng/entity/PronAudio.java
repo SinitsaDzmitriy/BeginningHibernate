@@ -6,7 +6,9 @@ import java.sql.Blob;
 @Entity
 @Table(name = "pron_media")
 public class PronAudio {
-    @OneToMany(cascade = CascadeType.ALL)
+    @Id
+    private Long id;
+    @OneToOne(cascade = CascadeType.ALL)
     // ToDo get more about this annotation
     @MapsId
     private Pronunciation pron;

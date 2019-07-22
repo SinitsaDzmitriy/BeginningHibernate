@@ -63,12 +63,18 @@
         <mapping class="edu.hibernate.samples.association.many2many.link.entities.PersonAddress"/>
         -->
 
+        <!--
         <mapping class="edu.hibernate.samples.aveng.entity.Card"/>
         <mapping class="edu.hibernate.samples.aveng.entity.CardMapping"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Type"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Lang"/>
+        -->
 
+        <!--
         <mapping class="edu.hibernate.samples.largeobjects.entity.JpaMappedPronunciation"/>
+        -->
+
+        <mapping class="edu.hibernate.samples.largeobjects.entity.HiberMappedPronunciation"/>
 
     </session-factory>
 </hibernate-configuration>

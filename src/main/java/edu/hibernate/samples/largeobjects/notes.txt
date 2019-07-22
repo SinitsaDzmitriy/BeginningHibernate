@@ -145,3 +145,131 @@ example. The only 2 differences are:
 
         ...
     }
+
+    And Hibernate also enables you to map the nationalized character data types
+NCHAR, NVARCHAR, LONGNVARCHAR, and NCLOB to a java.sql.Clob.
+
+    @Entity
+    public class Book {
+
+        @Id
+        @GeneratedValue
+        private Long id;
+
+        @Nationalized
+        private Clob content;
+
+        ...
+    }
+
+    -- Use the mapping
+
+    The types java.sql.Clob and java.sql.Blob provide more flexibility to the JDBC
+driver, but they are not as easy to use as a byte[] or a String.
+    You need to use Hibernate’s BlobProxy and ClobProxy classes to create a Blob or
+Clob. As you can see in the code, that’s a rather small inconvenience.
+
+    an inconvenience - неудобство
+
+    Book b = new Book();
+    b.setTitle("Title");
+    b.setCover(BlobProxy.generateProxy(getCover()));
+    b.setContent(ClobProxy.generateProxy("looong text"));
+    em.persist(b);
+
+    To create a Blob object, you can call the generateProxy method of the BlobProxy
+with a byte[] or an InputStream. And you can call the generateProxy method of the
+ClobProxy with a String or a Reader. That makes both proxies very comfortable to use.
+    Reading a Blob or a Clob is also not too complicated but requires a little more
+work than using a byte[] or a String. The java.sql.Blob interface provides you with
+multiple methods to get an InputStream or a byte[] of the BLOB value. And the
+java.sql.Clob interface defines various ways to get a Reader or a String of the CLOB
+value.
+
+    Book b2 = em.find(Book.class, b.getId());
+    Reader charStream = b2.getContent().getCharacterStream();
+    InputStream binaryStream = b2.getCover().getBinaryStream();
+
+    -- Lazy loading for LOBs
+
+    When we are talking about LOBs, we also need to talk about lazy loading. In most
+cases, LOBs require too much memory to fetch them eagerly every time you fetch the
+entity. It would be better only to fetch the LOB if you need it in your business code.
+    JPA defines lazy fetching for basic attributes as a hint. That means that your
+persistence provider can decide if it follows that hint or fetches the value eagerly.
+    As a result, the support and implementation of this feature depend on your JPA
+implementation. Hibernate, for example, requires you to activate byte code enhancement.
+
+    eager - жаждущий (жадный)
+    a hint - совет, намек
+    an enhancement - улучшение
+
+    In this article, I want to show and recommend a different approach. It doesn’t
+require any provider-specific features and works with all JPA implementations.
+    The easiest and best way to load LOBs lazily is to store them in a separate table.
+
+    Relational model:
+
+                books
+    id          bigint                  pk
+    title       character varying(255)
+
+                OneToOne
+
+                payload
+    content     text
+    cover       oid
+    book_id     bigint                  pk | fk
+
+    You can then map the LOBs to a separate entity. That allows you to remove the LOBs
+from the Book entity and to model a unidirectional one-to-one association with a shared
+primary key on the BookLobs entity.
+
+    to share - (по)делиться через какой-то ресурс
+
+    The mapping of the 2 entities is pretty simple.
+
+    -- Define the mapping (Object model)
+
+    After removing the 2 LOBs, the Book entity is a simple entity with a generated primary
+key and a title attribute. As I will show you in the next section, you don’t need to model
+the association to the BookLob entity.
+
+    @Entity
+    public class Book {
+
+        @Id
+        @GeneratedValue
+        private Long id;
+
+        private String title;
+
+        ...
+    }
+
+    The BookLob entity models a unidirectional one-to-one association to the Book entity. The
+@MapsId annotation tells Hibernate to use the primary key value of the associated Book.
+
+    The materialized mappings of the content and cover attributes are the same as was used in
+the first example.
+
+    @Entity
+    public class BookLobs {
+
+        @Id
+        private Long id;
+
+        @OneToOne
+        @MapsId
+        private Book book;
+
+        @Lob
+        private String content;
+
+        @Lob
+        private byte[] cover;
+
+        ...
+    }
+
+

@@ -1,15 +1,12 @@
 package edu.hibernate.samples.largeobjects.entity.separation;
 
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.sql.Blob;
 import java.sql.Clob;
 
 @Entity
 public class PronunciationPayload {
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     // ToDo get more about this annotation
     @MapsId
     private Pronunciation pron;
@@ -30,5 +27,13 @@ public class PronunciationPayload {
         this.pron = pron;
         this.audio = audio;
         this.article = article;
+    }
+
+    public Clob getArticle() {
+        return article;
+    }
+
+    public Blob getAudio() {
+        return audio;
     }
 }

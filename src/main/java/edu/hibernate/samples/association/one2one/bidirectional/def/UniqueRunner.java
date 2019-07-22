@@ -6,7 +6,7 @@ import edu.hibernate.samples.evaluator.util.SessionUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-// An attempt to persist 2 Word objects referring to the same Pronunciation object.
+// An attempt to persist 2 Word objects referring to the same JpaMappedPronunciation object.
 public class UniqueRunner {
     public static void main(String[] args) {
         try (Session session = SessionUtil.getSession()) {

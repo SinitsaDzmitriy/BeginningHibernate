@@ -39,12 +39,12 @@
 
         <!--
         <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.Word"/>
-        <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.Pronunciation"/>
+        <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.JpaMappedPronunciation"/>
          -->
 
         <!--
         <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.Word"/>
-        <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.Pronunciation"/>
+        <mapping class="edu.hibernate.samples.association.one2one.bidirectional.def.entities.JpaMappedPronunciation"/>
         -->
 
         <!--
@@ -68,6 +68,7 @@
         <mapping class="edu.hibernate.samples.aveng.entity.Type"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Lang"/>
 
+        <mapping class="edu.hibernate.samples.largeobjects.entity.JpaMappedPronunciation"/>
 
     </session-factory>
 </hibernate-configuration>

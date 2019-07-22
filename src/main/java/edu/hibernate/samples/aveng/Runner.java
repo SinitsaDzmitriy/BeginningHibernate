@@ -56,6 +56,11 @@ public class Runner {
 
             trans.commit();
 
+//            session.clear();
+//            trans = session.beginTransaction();
+//
+//            trans.commit();
+
         }
     }
 }

@@ -1,0 +1,147 @@
+    -- Mapping BLOBs and CLOBs with Hibernate and JPA
+
+    Databases use the data types BLOB (binary large object) and CLOB
+(character large object) to store large objects, like images and very long
+texts. JPA and Hibernate provide two kinds of mappings for these types.
+
+    You can choose if you want to:
+
+    1. Materialize the LOB and map it to a byte[] or a String. This mapping
+is defined by the JPA specification and prioritizes ease of use over
+performance.
+
+    2. Use JDBC’s LOB locators java.sql.Blob and java.sql.Clob. The LOB
+locators enable your JDBC driver to optimize for performance, e.g., by
+streaming the data. This mapping is Hibernate-specific.
+
+    to materialize - материализовать, реализовать
+    to prioritize - отдавать приоритет
+    to enable sb to do sth - позволить кому-либо делать что-либо
+
+    The mapping of both approaches looks almost identical. You just need to
+annotate your entity attribute with a @Lob annotation. The only difference
+is the type of your entity attribute.
+    But you will see a huge difference in the way you use the values of
+these entity attributes.
+    Let’s use both options to map the following Book table.
+
+                    book
+    id          bigint                  pk
+    content     text
+    cover       oid
+    title       character varying(255)
+
+    The columns cover of type oid and content of type text are the important
+ones for this article. We will map the cover column as BLOB and the content
+column as a CLOB.
+
+    -- Mapping a LOB to String or byte[]
+
+    The materialized mapping to a String or a byte[] is the most intuitive
+mapping for most Java developers. Entity attributes of these types are easy
+to use, and it feels natural to use them in your domain model.
+
+    But Hibernate also needs to fetch all data stored in the LOB immediately
+and map it to a Java object. Depending on the size of your LOB, this can
+cause severe performance problems. If you, e.g., store large video files in
+your database, it’s often better to use JDBC’s LOB locators. I show you how
+to use them in the next section.
+
+    immediately - немедленно, тотчас
+    severe - серьезный, тяжелый, сильный
+
+    The JPA specification defines this mapping. You can not only use it with
+Hibernate but also with EclipseLink and OpenJPA.
+
+    - Define the mapping
+
+    Creating materialized mappings is very simple. You just need an attribute
+of type String or byte[] and annotate it with JPA’s @Lob annotation.
+
+    @Entity
+    public class Book {
+
+        @Id
+        @GeneratedValue
+        private Long id;
+
+        private String title;
+
+        @Lob
+        private String content;
+
+        @Lob
+        private byte[] cover;
+
+        ...
+    }
+
+    Hibernate can also map nationalized character data types, like NCHAR,
+NVARCHAR, LONGNVARCHAR, and NCLOB. To define such a mapping, you need to
+annotate your entity attribute of type String with Hibernate’s @Nationalized
+annotation instead of @Lob.
+
+    @Entity
+    public class Book {
+
+        @Id
+        @GeneratedValue
+        private Long id;
+
+        private String title;
+
+        @Nationalized
+        private String content;
+
+        @Lob
+        private byte[] cover;
+
+        ...
+    }
+
+    - Use the mapping
+
+    As I said at the beginning of this article, materialized mappings are
+straightforward to use. Hibernate fetches all data stored in the LOB when it
+initializes the entity and maps it to a String or byte[]. You can then use
+the entity attribute in the same way as any other attribute.
+
+    straightforward - прямой, простой
+
+    -- Mapping a LOB to java.sql.Clob or java.sql.Blob
+
+    With Hibernate, you can use the same approach to map your LOB to a
+java.sql.Clob or a java.sql.Blob. These Java types are not as easy to use as a
+String or byte[]. But they enable your JDBC driver to use LOB-specific
+optimizations, which might improve the performance of your application. If and
+what kind of optimizations are used, depends on the JDBC driver and your
+database.
+    The mapping is Hibernate-specific and not defined by the JPA specification.
+
+    -- Define the mapping
+
+    As you can see in the following code snippet, the mapping to JDBC’s LOB
+locators java.sql.Clob and java.sql.Blob is almost identical to the previous
+example. The only 2 differences are:
+    1. The cover attribute is now of type Blob.
+    2. The content attribute is of type Clob.
+
+    a snippet - фрагмент, отрывок, кусок
+
+    @Entity
+    public class Book {
+
+        @Id
+        @GeneratedValue
+        private Long id;
+
+        private String title;
+
+        @Lob
+        private Clob content;
+
+        @Lob
+        private Blob cover;
+
+        ...
+    }

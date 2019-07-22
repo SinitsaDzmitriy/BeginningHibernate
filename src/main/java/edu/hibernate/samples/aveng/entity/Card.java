@@ -18,8 +18,12 @@ public class Card {
             foreignKey = @ForeignKey(name = "TYPE_ID_FK"))
     private Type type;
 
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @JoinColumn(name = "pronunciation_id",
+            foreignKey = @ForeignKey(name = "PRON_ID_FK"))
+    private Pronunciation pron;
+
     private String content;
-    private String transcription;
     private String definition;
 
     @OneToMany(mappedBy = "sourceCard",
@@ -30,14 +34,20 @@ public class Card {
     public Card() {
     }
 
-    public Card(Type type, String content, String definition) {
+    public Card(Type type, String content, Pronunciation pron, String definition) {
         this.type = type;
         this.content = content;
+        this.pron = pron;
         this.definition = definition;
     }
 
     public Long getId() {
         return id;
+    }
+
+    // ToDo remove temporary method
+    public Pronunciation getPron() {
+        return pron;
     }
 
     public void addMapping(Card destCard, double frequency) {
@@ -69,12 +79,11 @@ public class Card {
         Card card = (Card) o;
         return Objects.equals(type, card.type)
                 && Objects.equals(content, card.content)
-                && Objects.equals(transcription, card.transcription)
                 && Objects.equals(definition, card.definition);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, content, transcription, definition);
+        return Objects.hash(type, content, definition);
     }
 }

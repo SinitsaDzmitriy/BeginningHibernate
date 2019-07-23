@@ -1,9 +1,7 @@
 package edu.hibernate.samples.aveng.entity;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "cards")
@@ -24,7 +22,14 @@ public class Card {
     private Pronunciation pron;
 
     private String content;
+
+
+    private Picture picture;
+
     private String definition;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Set<Sample> samples = new HashSet<>();
 
     @OneToMany(mappedBy = "sourceCard",
             cascade = CascadeType.ALL,

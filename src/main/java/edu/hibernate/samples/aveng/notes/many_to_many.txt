@@ -1,0 +1,276 @@
+    Best Practices for Many-to-Many Associations with Hibernate and JPA
+
+    Many-to-Many associations are one of the most commonly used associations with
+JPA and Hibernate. You can find lots of examples for them in the real world, and
+you can map them with JPA and Hibernate as a uni- or bidirectional association in
+your domain model.
+    But you probably also know that these mappings provide several pitfalls. In
+this article, I will show you 5 best practices that will help you to avoid these
+pitfalls and to implement efficient mappings. You will learn:
+
+    1. The most efficient data type for your association
+    2. Why you need utility methods to manage your association
+    3. The right FetchType for an efficient mapping
+    4. When and how to use query-specific fetching
+    5. The CascadeType you should avoid at all costs
+
+    at all costs — любой ценой
+
+    -- 1. The most efficient data type for your association
+
+    Most developers don’t spend a lot of thoughts on the data type of a to-many
+association. They just choose a java.util.List because it’s simple and doesn’t
+perform any checks to avoid duplicates.
+
+     to spend thoughts on - задумываться над, думать о
+
+     That’s OK, if you implement a basic Java class or if you model a One-to-Many
+or Many-to-One association. But you should never use a List if you model a
+Many-to-Many association.
+
+    // DON'T DO THIS!!!
+
+    @Entity
+    public class Book {
+
+        @ManyToMany
+        @JoinTable(name = "book_author",
+                joinColumns = { @JoinColumn(name = "fk_book") },
+                inverseJoinColumns = { @JoinColumn(name = "fk_author") })
+        private List<Author> authors = new ArrayList<Author>();
+
+        ...
+    }
+
+    Hibernate handles remove operations on Many-to-Many relationships that are
+mapped to a java.util.List very inefficiently.
+
+    to handle - управлять, регулировать
+
+    Long bookId;
+    Author author;
+    Book book;
+
+    ...
+
+    em = emf.createEntityManager();
+    em.getTransaction().begin();
+
+    // Get Book entity with 2 Authors
+    book = em.find(Book.class, bookId);
+
+    // Remove one of the Author
+    book.getAuthors().remove(author);
+
+    em.getTransaction().commit();
+    em.close();
+
+    It first removes all records from the association table before it inserts all
+remaining ones.
+
+    to remain - оставаться
+
+    update Book set title=?, version=? where id=? and version=?;
+    delete from book_author where fk_book=?;
+    insert into book_author (fk_book, fk_author) values (?, ?);
+
+    You should instead model a many-to-many association as a java.util.Set.
+
+    @Entity
+    public class Book {
+
+        @ManyToMany
+        @JoinTable(name = "book_author",
+                joinColumns = { @JoinColumn(name = "fk_book") },
+                inverseJoinColumns = { @JoinColumn(name = "fk_author") })
+        private Set<Author> authors = new HashSet<>();
+
+        ...
+    }
+
+    Hibernate then handles remove operations on the association much better. It
+now only removes the expected records from the association and keeps the others
+untouched.
+
+    update Book set title=?, version=? where id=? and version=?;
+    delete from book_author where fk_book=? and fk_author=?
+
+    -- 2. Why you need utility methods to manage your association
+
+    Bidirectional associations are mapped to an entity attribute on both ends of
+the relationships. So, in the previous example, you have an authors attribute on
+the Book entity, and a books attribute on the Author entity. That makes
+implementing a JPQL or CriteriaQuery very comfortable because you can use these
+attributes to define a JOIN clause.
+
+    But adding or removing an association gets more complicated. You always need
+to perform the change on both ends of the association. For example, if you want
+to add a Book to Author, you need to add it to the "books" attribute of the
+Author entity, and you also need to add the Author to the "authors" attribute on
+the Book entity. Otherwise, your current persistence context contains
+inconsistent data which you will use until the end of your current transaction.
+
+    inconsistent - противоречивый
+
+    Long authorId;
+
+    ...
+
+    Book book = new Book();
+    book.setTitle("Book title");
+    em.persist(book);
+
+    Author author = em.find(Author.class, authorId);
+    author.getBooks().add(book);
+    book.getAuthors().add(author);
+
+    Utility methods on your Author and Book entities make updating and removing
+much easier. Within these methods, you perform the required operations on both
+entities.
+
+    @Entity
+    public class Author {
+
+        @ManyToMany(mappedBy = "authors")
+        private Set<Book> books = new HashSet<>();
+
+        ...
+
+        public void addBook(Book book) {
+            books.add(book);
+
+            book.getAuthors().add(this);
+        }
+
+        public void removeBook(Book book) {
+            books.remove(book);
+            book.getAuthors().remove(this);
+        }
+    }
+
+    [add]removeAuthor() method of the Book class isn't called her, because if
+it's write the same way as [add]removeBook() then there is an endless set cycle.
+That is why we work with collections straightforward.
+
+    -- 3. The right FetchType for an efficient mapping
+
+    This is a quick one. You should always use FetchType.LAZY for your
+many-to-many associations. It tells your persistence provider not to fetch the
+associated entities from the database until you use them. That’s usually the case
+when you call its getter method for the first time.
+    Luckily, that’s the default for all to-many associations. So, please make
+sure that you don’t change it.
+    LAZY FETCHING IS THE DEFAULT FOR ALL TO-MANY ASSOCIATIONS!
+
+    ToDo Introduction to JPA FetchTypes
+    [https://thoughts-on-java.org/jpa-21-entity-graph-part-2-define/]
+
+    -- 4. When and how to use query-specific fetching
+
+    If you’re using FetchType.LAZY, you need to know about query-specific
+fetching. Otherwise, your application will be very slow because you created lots
+of n+1 select issues.
+
+    a select issue - запрос на выборку
+
+    When you load an entity and use query-specific fetching, you tell Hibernate
+which mapped associations it shall initialize for each fetched entity. It then
+extends the SELECT clause of your query so that it includes the columns mapped by these other entities and initializes the associations. And because the
+associations are already initialized, Hibernate doesn’t need to perform an
+additional query when you access its getter method for the first time.
+
+    You can implement query-specific fetching in several different ways. The
+simplest one is a JOIN FETCH clause, which I will show you here. But you can also
+use a @NamedEntityGraph or an EntityGraph, which I explained in previous
+articles.
+
+    The definition of a JOIN FETCH clause is almost identical to a simple JOIN
+clause in a JPQL query. You just need to add the FETCH keyword.
+
+    Author author;
+    ....
+    author = em
+        .createQuery("SELECT a FROM Author a JOIN FETCH a.books WHERE a.id = 1",
+            Author.class).getSingleResult();
+
+    Even so, a JOIN And a JOIN FETCH clause look very similar, the JOIN FETCH
+clause has a much bigger effect on the generated SQL query. It not only gets
+translated into a SQL JOIN, as it’s the case for a JPQL JOIN clause, it also
+forces your persistence provider to extend the SELECT clause by all columns that
+are mapped by the associated entity.
+
+    ToDo JPQL
+    [https://thoughts-on-java.org/jpql/]
+    ToDo query-specific fetching
+    [https://thoughts-on-java.org/jpql/]
+    ToDo @NamedEntityGraph
+    [https://thoughts-on-java.org/jpa-21-entity-graph-part-1-named-entity/]
+    ToDo EntityGraph
+    [https://thoughts-on-java.org/jpa-21-entity-graph-part-2-define/]
+
+    Even so, ... - Несмтря на это, ...
+    as it’s the case for a JPQL JOIN clause
+    как в случае с JPQL JOIN условием
+    to force - принуждать, заставлять
+
+    select
+        author0_.id as id1_0_0_,
+        book2_.id as id1_1_1_,
+        author0_.firstName as firstNam2_0_0_,
+        author0_.lastName as lastName3_0_0_,
+        author0_.version as version4_0_0_,
+        book2_.format as format2_1_1_,
+        book2_.publishingDate as publishi3_1_1_,
+        book2_.title as title4_1_1_,
+        book2_.version as version5_1_1_,
+        books1_.author_id as author_i2_2_0__,
+        books1_.book_id as book_id1_2_0__
+    from
+        Author author0_
+    inner join
+        book_author books1_
+        on author0_.id=books1_.author_id
+    inner join
+        Book book2_
+        on books1_.book_id=book2_.id
+    where
+        author0_.id=1
+
+    По заданому id (=1) находим author из таблицы Author, вытягивая его свойства
+firstName, lastName, version.
+    book_author - таблица связей.
+    Добавляем при этом все поля (author_id, book_id) entity из таблицы
+book_author, у которой поле author_id совпадает с заданным изначально id.
+    Добавляем при этом все поля (author_id, book_id) entity из таблицы Book, у
+которой поле id совпадает с book_id, вытянутым из book_author.
+
+    -- 5. The CascadeType you should avoid at all costs
+
+    If you activate cascading on an association, your persistence provider
+applies the operations you perform on the entity to all associated entities. If
+it does that for all operations or just for a few selected ones depends on the
+configured CascadeType.
+    That might sound like an amazing idea that makes the implementation of your
+business logic much easier. And that’s not entirely wrong.
+    But please avoid the CascadeTypes REMOVE and ALL, which includes REMOVE, for
+many-to-many associations. In the best case, it only creates performance issues,
+but in the worst case, it might also remove more records than you intended.
+
+    to depend on sth - зависеть от чего-либо
+    entirely - совершенно
+    to intend - намереваться, собираться, предполагать
+
+    Or if you want to keep it simple, trigger the required information
+programmatically on the associated entities. This might require a few more lines
+of code, but it avoids any unexpected side effects.
+    ToDo read explanation and solution for this 2 pitfalls!
+    [https://thoughts-on-java.org/avoid-cascadetype-delete-many-assocations/
+
+
+    to trigger - запускать, инициировать
+
+
+
+
+
+

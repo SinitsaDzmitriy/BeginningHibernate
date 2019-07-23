@@ -24,7 +24,7 @@ public class Card {
     private String content;
 
 
-    private Picture picture;
+    private Image image;
 
     private String definition;
 

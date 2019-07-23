@@ -76,9 +76,12 @@
         <mapping class="edu.hibernate.samples.aveng.entity.Type"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Lang"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Pronunciation"/>
+
         <mapping class="edu.hibernate.samples.aveng.entity.PronAudio"/>
         <mapping class="edu.hibernate.samples.aveng.entity.Sample"/>
+
         <mapping class="edu.hibernate.samples.aveng.entity.Picture"/>
+        <mapping class="edu.hibernate.samples.aveng.entity.Image"/>
 
     </session-factory>
 </hibernate-configuration>

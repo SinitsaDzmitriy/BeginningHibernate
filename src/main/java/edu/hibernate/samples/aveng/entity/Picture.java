@@ -1,36 +1,43 @@
 package edu.hibernate.samples.aveng.entity;
 
-import javax.persistence.*;
-import java.sql.Blob;
-
-// ToDo: Decide what we should do when admin deletes card.
-/*
-        Thoughts
-        One picture to many cards.
-*/
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "pictures")
 public class Picture {
+
     @Id
+    @GeneratedValue
     private Long id;
 
-    @Lob
-    private Blob image;
-
     /*
-        Contain list of associations (words and phrases related to the bound
-image). It will help user to find image for a new card among already available.
-The card-side void addPicture(Picture picture) method should also update
-association list, add a new one.
+    Temporary field, it will be replaced with
 
-        private List<String> associations;
+    private List<String> associations;
+
+    Contain list of associations (words and phrases related to the bound
+image). It will help user to find image for a new card among already available.
+The card-side void addPicture(Image picture) method should also update
+association list, add a new one.
     */
 
+    private String description;
 
+    public Picture() {
+    }
 
+    public Picture(String description) {
+        this.description = description;
+    }
 
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @MapsId
-    private Card card;
+    public Long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
